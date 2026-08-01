@@ -1,9 +1,14 @@
 # Pentrado
 
+**▶ Try it in your browser: [pentrado.com](https://pentrado.com)** — no install, your document persists locally.
+
 A layered raster/vector image editor for the web — the class of tool occupied by
 GIMP, Photoshop and Photopea, built as an embeddable library. Pentrado is developed
-inside ComfyTV today but has no dependency on ComfyUI or ComfyTV: everything the
-editor needs from its surroundings goes through the `PentradoHost` interface.
+alongside [ComfyTV](https://github.com/jtydhr88/ComfyTV) (where it powers the Layer
+Editor and Storyboard stages) but has no dependency on ComfyUI or ComfyTV: everything
+the editor needs from its surroundings goes through the `PentradoHost` interface.
+
+![Pentrado editor](docs/demo1.png)
 
 ## Layout
 
