@@ -1,6 +1,7 @@
 import './tailwind.css'
 
 import { createApp, defineComponent, h } from 'vue'
+import IconGithub from '~icons/lucide/github'
 
 import {
   LayerEditorCanvas,
@@ -88,6 +89,16 @@ const siteHost: PentradoHost = {
   async uploadCanvas(canvas) {
     return canvas.toDataURL('image/png')
   },
+  toolbarActions: [
+    {
+      id: 'github',
+      title: 'View source on GitHub',
+      icon: IconGithub,
+      run: () => {
+        window.open('https://github.com/jtydhr88/pentrado', '_blank', 'noopener')
+      },
+    },
+  ],
 }
 
 async function bootstrap(): Promise<void> {
