@@ -88,7 +88,10 @@ const siteHost: PentradoHost = {
     return { url: await blobToDataUrl(blob) }
   },
   async uploadCanvas(canvas) {
-    return canvas.toDataURL('image/png')
+
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/png'))
+    if (!blob) return canvas.toDataURL('image/png')
+    return blobToDataUrl(blob)
   },
   toolbarActions: [
     {
