@@ -1,6 +1,6 @@
 import './tailwind.css'
 
-import { createApp, defineComponent, h } from 'vue'
+import { createApp, defineComponent, h, shallowRef } from 'vue'
 import IconGithub from '~icons/lucide/github'
 
 import {
@@ -8,6 +8,7 @@ import {
   LayerEditorToolBar,
   LayerEditorToolStrip,
   LayerListPanel,
+  useLayerEditorHotkeys,
   useLayerEditorStage,
   type PentradoHost,
 } from '@jtydhr88/pentrado'
@@ -117,16 +118,34 @@ async function bootstrap(): Promise<void> {
   const Root = defineComponent({
     setup() {
       const editor = useLayerEditorStage({ storage, instanceId: 'pentrado-site', host: siteHost })
+      ;(window as unknown as { __pentrado?: unknown }).__pentrado = editor
+      const canvasRef = shallowRef<{ setSpaceDown?: (v: boolean) => void } | null>(null)
+      const hotkeys = useLayerEditorHotkeys(editor, {
+        setSpaceDown: (v: boolean) => canvasRef.value?.setSpaceDown?.(v),
+        isFullscreen: () => false,
+        exitFullscreen: () => {},
+      })
       requestAnimationFrame(() => requestAnimationFrame(() => editor.fitView()))
       return () =>
-        h('div', { class: 'ctv:flex ctv:h-full ctv:flex-col ctv:gap-1 ctv:text-xs ctv:text-base-foreground' }, [
-          h(LayerEditorToolBar, { editor }),
-          h('div', { class: 'ctv:flex ctv:min-h-0 ctv:flex-1 ctv:gap-1' }, [
-            h(LayerEditorToolStrip, { editor }),
-            h('div', { class: 'ctv:relative ctv:min-w-0 ctv:flex-1' }, [h(LayerEditorCanvas, { editor })]),
-            h(LayerListPanel, { editor }),
-          ]),
-        ])
+        h(
+          'div',
+          {
+            class: 'ctv:flex ctv:h-full ctv:flex-col ctv:gap-1 ctv:text-xs ctv:text-base-foreground',
+            tabindex: -1,
+            onKeydown: hotkeys.onKeyDown,
+            onKeyup: hotkeys.onKeyUp,
+          },
+          [
+            h(LayerEditorToolBar, { editor }),
+            h('div', { class: 'ctv:flex ctv:min-h-0 ctv:flex-1 ctv:gap-1' }, [
+              h(LayerEditorToolStrip, { editor }),
+              h('div', { class: 'ctv:relative ctv:min-w-0 ctv:flex-1' }, [
+                h(LayerEditorCanvas, { editor, ref: canvasRef }),
+              ]),
+              h(LayerListPanel, { editor }),
+            ]),
+          ]
+        )
     },
   })
 

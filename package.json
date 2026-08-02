@@ -17,6 +17,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "vue-tsc --noEmit",
+    "e2e": "playwright test",
+    "e2e:headed": "playwright test --headed",
     "deploy": "npm run build && wrangler pages deploy ./dist --project-name=pentrado --branch=main"
   },
   "dependencies": {
@@ -27,6 +29,7 @@
   },
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.115",
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/vite": "^4.3.0",
     "@vitejs/plugin-vue": "^5.2.3",
     "@vue/test-utils": "^2.4.11",
